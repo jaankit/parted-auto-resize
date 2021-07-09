@@ -28,8 +28,11 @@ MAXSIZEMB=`printf %s\\n 'unit MB print list' | parted | grep "Disk ${DEVICE}" | 
 echo "[ok] would/will resize to from ${CURRENTSIZE}MB to ${MAXSIZEMB}MB "
 
 if [[ "$APPLY" == "apply" ]] ; then
+  echo "Considering ${MAXSIZEMB} - 2048MB"
+  MAXSIZEMB=`expr $MAXSIZEMB - 2048`
+  MAXSIZEMB="${MAXSIZEMB}MB"
   echo "[ok] applying resize operation.."
-  parted ${DEVICE} resizepart ${PARTNR} ${MAXSIZEMB}
+  parted ${DEVICE} resizepart ${PARTNR} Yes ${MAXSIZEMB}
   echo "[done]"
 else
   echo "[WARNING]!: Sandbox mode, i did not size!. Use 'apply' as the 3d parameter to apply the changes"
